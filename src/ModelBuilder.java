@@ -23,6 +23,7 @@ public class ModelBuilder
             i = Math.max(i, fr.getSize());
         }
         Model[] models = new Model[i];
+        //Works!
         for (int j = 0; j < models.length; j++) {
             ArrayList modelFrames = new ArrayList();
             modelFrames.add(new SourceFrame(this.source));
