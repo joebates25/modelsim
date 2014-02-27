@@ -1,0 +1,5 @@
+source 2000 .5 .5 "FirstNode"
+sf "FirstNode" [0:100:1000] 30 "DiseaseChecker"
+df "DiseaseChecker" need-treat .25 .75 100 40 "Treatment" "OK"
+sf "Treatment" 100 50 "OK"
+sink "OK"

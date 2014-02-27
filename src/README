@@ -1,0 +1,55 @@
+DOCUMENTATION:
+
+Create a model by using the sf/df/sink/source constructs. There are a few requirements:
+
+The input file should start by specifying a source node. The remaining nodes can be written out in any order, and there can be multiple sinks, but the
+ input file must start with the source node.
+ Also, all node names must be in quotes and cannot contain spaces. Eg: {"Node 1" = invalid, "Node_1" or "Node1" = valid}
+ Finally, if you reference a node by name that doesn't exist, an error will be thrown. Be sure to specify all node names correctly.
+
+
+ The syntax for the nodes are as follows:
+
+ Source- A source node that will initially contain all patients.
+        source {#patients} {see-opt} {need-treat} {next-node}
+            #patients: non-zero integer specifying the initial number of patients to be used
+            see-opt: float between 0 and 1 specifying the percentage of patients needing to see the optometrist
+            need-treat: float between 0 and 1 specifying the percentage of patients needing treatment
+            next-node: a string of the node to which the source node will send patients
+
+ Standard Node- A standard node that takes patients from an input, and passes them to another node
+        sf {node-name} {cost} {capacity} {next-node}
+            node-name: a string of the name of the node
+            cost: an int specifying the cost of the node
+            capacity: an int specifying the capacity of the node
+            next-node: a string of the node to which the source node will send patients
+
+ Decision Node- A node that accepts patients from an input and sends them to 1 of two nodes, depending on the patient's information,
+        and the parameters of the node.
+        df {node-name} {checked-var} {sens} {spec} {cost} {capacity} {affirmatoryNode} {negatoryNode}
+            node-name: a string of the name of the node
+            checked-var: the variable to analyzed. Must be see_opt or need-treat (no quotes)
+            sens: sensitivity as a float between 0 and 1
+            spec: specificity as a float between 0 and 1
+            cost: an int specifying the cost of the node
+            capacity: an int specifying the capacity of the node
+            affirmativeNode: the node to which the patient will be sent if the checked-var is true
+            negatoryNode: the node to which the patient wil be sent if the checked-var is false
+ Sink Node- A "reservoir" node that takes patients and doesn't send them anywhere else. i.e the "end" of the flow
+           sink {node-name}
+           node-name: a string of the name of the nodes
+
+
+Example:
+source 2000 .5 .5 "FirstNode"
+sf "FirstNode" 100 30 "DiseaseChecker"
+df "DiseaseChecker" need-treat .9 .75 100 40 "Treatment" "OK"
+sf "Treatment" 100 50 "OK"
+sink "OK"
+
+You can create a decision node that only redirects patients simply by setting the sensitivity/specificity to 1 and
+the cost/capacity to 0.
+For example, the line:
+        df "GoHome?" go_home 1 1 0 0 "Home" "Work"
+    can be interpreted as "if the entity's go_home variable is true, send it to the Home node. Otherwise, send it to
+    the "Work" node.
