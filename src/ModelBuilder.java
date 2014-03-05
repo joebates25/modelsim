@@ -17,13 +17,13 @@ public class ModelBuilder
         this.frames.add(paramFrameRange);
     }
 
+
     public Model[] buildModels() {
         int i = 0;
         for (FrameRange fr: frames){
             i = Math.max(i, fr.getSize());
         }
         Model[] models = new Model[i];
-        //Works!
         for (int j = 0; j < models.length; j++) {
             ArrayList modelFrames = new ArrayList();
             modelFrames.add(new SourceFrame(this.source));
@@ -47,6 +47,7 @@ public class ModelBuilder
 
     public void addSource(SourceFrame paramSourceFrame) {
         this.source = paramSourceFrame;
+
     }
 
     public void addSink(SinkFrame paramSinkFrame) {

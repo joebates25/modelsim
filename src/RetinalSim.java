@@ -1,9 +1,8 @@
  import java.io.File;
-/*     */ import java.io.FileNotFoundException;
-/*     */ import java.io.PrintStream;
-/*     */ import java.util.ArrayList;
-/*     */ import java.util.Random;
-/*     */ import java.util.Scanner;
+ import java.io.FileNotFoundException;
+ import java.util.ArrayList;
+ import java.util.Random;
+ import java.util.Scanner;
 
  public class RetinalSim
  {
@@ -14,8 +13,8 @@
        Scanner scanner;
        if (args[0].equalsIgnoreCase("-help")) {
          scanner = new Scanner(new File("README"));
-         while (((Scanner)scanner).hasNextLine())
-           System.out.println(((Scanner)scanner).nextLine());
+         while (scanner.hasNextLine())
+           System.out.println(scanner.nextLine());
        }
        else {
          Model[] models = readInputFile(args[0]);
@@ -23,7 +22,7 @@
          {
            models[i].run();
 
-           System.out.printf("Model %d: \n", new Object[] { Integer.valueOf(i) });
+           System.out.printf("Model %d: \n", i);
            models[i].reportResults();
          }
        }
@@ -33,27 +32,19 @@
 
    public static boolean weightedProb(double paramDouble)
    {
-     double d = new Random().nextInt(100);
-     if (paramDouble * 100.0D > d) {
-       return true;
-     }
+       return paramDouble * 100.0D > new Random().nextInt(100);
 
-     return false;
    }
 
-   public static void printProgress(double paramDouble)
-   {
-     System.out.print("\r" + paramDouble + "%");
-   }
 
    public static Model[] readInputFile(String fileName) {
      try {
+
        ModelBuilder mb = new ModelBuilder();
-       ArrayList localArrayList = new ArrayList();
        Scanner scanner = new Scanner(new File(fileName));
        while (scanner.hasNext()) {
-         String indentifier = scanner.next();
-         if (((String)indentifier).equalsIgnoreCase("source")) {
+         String identifier = scanner.next();
+         if (identifier.equalsIgnoreCase("source")) {
            int i = scanner.nextInt();
            double d1 = scanner.nextDouble();
            double d2 = scanner.nextDouble();
@@ -69,14 +60,14 @@
          else
          {
            FrameBuilder frameBuilder;
-           if (((String)indentifier).equalsIgnoreCase("df")) {
+           if (((String)identifier).equalsIgnoreCase("df")) {
              frameBuilder = new FrameBuilder();
              frameBuilder.setType("df");
              frameBuilder.setName(scanner.next());
              String checked_var = scanner.next();
-             if ((!((String)checked_var).equalsIgnoreCase("see_opt")) && (!((String)checked_var).equalsIgnoreCase("need-treat")))
-               throw new Exception("\"" + (String)checked_var + "\" is an invalid variable. Must use \"see_opt\" or \"need-treat\".");
-             frameBuilder.setCheckedVar((String) checked_var);
+             if ((!checked_var.equalsIgnoreCase("see_opt")) && (!checked_var.equalsIgnoreCase("need-treat")))
+               throw new Exception("\"" + checked_var + "\" is an invalid variable. Must use \"see_opt\" or \"need-treat\".");
+             frameBuilder.setCheckedVar(checked_var);
              frameBuilder.setSensitivity(getRangeFromDouble(scanner));
              frameBuilder.setSpecificity(getRangeFromDouble(scanner));
              frameBuilder.setCost(getRangeFromDouble(scanner));
@@ -86,7 +77,7 @@
              FrameRange frameRange = frameBuilder.buildFrames();
              mb.add(frameRange);
              System.out.println("NODE PROCESSED: " + frameBuilder.name);
-           } else if (((String)indentifier).equalsIgnoreCase("sf")) {
+           } else if (((String)identifier).equalsIgnoreCase("sf")) {
              frameBuilder = new FrameBuilder();
              frameBuilder.setType("sf");
              frameBuilder.setName(scanner.next());
@@ -96,13 +87,13 @@
              FrameRange fr = frameBuilder.buildFrames();
              mb.add(fr);
              System.out.println("NODE PROCESSED: " + frameBuilder.name);
-           } else if (((String)indentifier).equalsIgnoreCase("sink")) {
+           } else if (identifier.equalsIgnoreCase("sink")) {
              SinkFrame sink = new SinkFrame();
              sink.setName(scanner.next());
              mb.addSink(sink);
              System.out.println("NODE PROCESSED: " + sink.name);
            } else {
-             throw new Exception("The term \"" + (String)indentifier + "\" is not a valid identifier. Must use source, sink, sf, or df.");
+             throw new Exception("The term \"" + identifier + "\" is not a valid identifier. Must use source, sink, sf, or df.");
            }
          }
        }
