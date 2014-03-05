@@ -23,110 +23,110 @@ public class FrameBuilder
         Frame[] arrayOfFrame = new Frame[i];
         for (int j = 0; j < i; j++)
         {
-            Frame localObject;
+            Frame frame;
             if (this.type == "df") {
-                localObject = new DecisionFrame();
-                ((DecisionFrame)localObject).setName(this.name);
-                ((DecisionFrame)localObject).setAffirmativeNode(this.affirmNode);
-                ((DecisionFrame)localObject).setNegatoryNode(this.negNode);
-                ((DecisionFrame)localObject).setCheckedVariable(this.checkedVar);
-                ((DecisionFrame)localObject).setCost((int)this.cost.get());
-                ((DecisionFrame)localObject).setCapacity((int)this.capacity.get());
-                ((DecisionFrame)localObject).setSpecificity(this.specificity.get());
-                ((DecisionFrame)localObject).setSensitivity(this.sensitivity.get());
-                arrayOfFrame[j] = localObject;
+                frame = new DecisionFrame();
+                ((DecisionFrame)frame).setName(this.name);
+                ((DecisionFrame)frame).setAffirmativeNode(this.affirmNode);
+                ((DecisionFrame)frame).setNegatoryNode(this.negNode);
+                ((DecisionFrame)frame).setCheckedVariable(this.checkedVar);
+                ((DecisionFrame)frame).setCost((int)this.cost.get());
+                ((DecisionFrame)frame).setCapacity((int)this.capacity.get());
+                ((DecisionFrame)frame).setSpecificity(this.specificity.get());
+                ((DecisionFrame)frame).setSensitivity(this.sensitivity.get());
+                arrayOfFrame[j] = frame;
             } else {
-                localObject = new StandardFrame();
-                ((StandardFrame)localObject).setName(this.name);
-                ((StandardFrame)localObject).setNextFrame(this.nextNode);
-                ((StandardFrame)localObject).setCost((int)this.cost.get());
-                ((StandardFrame)localObject).setCapacity((int)this.capacity.get());
-                arrayOfFrame[j] = localObject;
+                frame = new StandardFrame();
+                ((StandardFrame)frame).setName(this.name);
+                ((StandardFrame)frame).setNextFrame(this.nextNode);
+                ((StandardFrame)frame).setCost((int)this.cost.get());
+                ((StandardFrame)frame).setCapacity((int)this.capacity.get());
+                arrayOfFrame[j] = frame;
             }
         }
         return new FrameRange(arrayOfFrame);
     }
 
     public String getType()
-/*     */   {
-/*  58 */     return this.type;
-/*     */   }
+   {
+     return this.type;
+   }
 
     public void setType(String paramString) {
-/*  62 */     this.type = paramString;
-/*     */   }
+    this.type = paramString;
+  }
 
     public String getNextNode() {
-/*  66 */     return this.nextNode;
-/*     */   }
+     return this.nextNode;
+   }
 
     public void setNextNode(String paramString) {
-/*  70 */     this.nextNode = paramString;
-/*     */   }
+     this.nextNode = paramString;
+   }
 
     public String getCheckedVar() {
-/*  74 */     return this.checkedVar;
-/*     */   }
+    return this.checkedVar;
+  }
 
     public void setCheckedVar(String paramString) {
-/*  78 */     this.checkedVar = paramString;
-/*     */   }
+     this.checkedVar = paramString;
+   }
 
     public Range getCost() {
-/*  82 */     return this.cost;
-/*     */   }
+     return this.cost;
+   }
 
     public void setCost(Range paramRange) {
-/*  86 */     this.cost = paramRange;
-/*     */   }
+    this.cost = paramRange;
+  }
 
     public Range getCapacity() {
-/*  90 */     return this.capacity;
-/*     */   }
+     return this.capacity;
+   }
 
     public void setCapacity(Range paramRange) {
-/*  94 */     this.capacity = paramRange;
-/*     */   }
+    this.capacity = paramRange;
+  }
 
     public Range getSensitivity() {
-/*  98 */     return this.sensitivity;
-/*     */   }
+     return this.sensitivity;
+   }
 
     public void setSensitivity(Range paramRange) {
-/* 102 */     this.sensitivity = paramRange;
-/*     */   }
+    this.sensitivity = paramRange;
+  }
 
     public Range getSpecificity() {
-/* 106 */     return this.specificity;
-/*     */   }
+     return this.specificity;
+   }
 
     public void setSpecificity(Range paramRange) {
-/* 110 */     this.specificity = paramRange;
-/*     */   }
+     this.specificity = paramRange;
+   }
 
     public String getAffirmNode() {
-/* 114 */     return this.affirmNode;
-/*     */   }
+     return this.affirmNode;
+   }
 
     public void setAffirmNode(String paramString) {
-/* 118 */     this.affirmNode = paramString;
-/*     */   }
+     this.affirmNode = paramString;
+   }
 
     public String getNegNode() {
-/* 122 */     return this.negNode;
-/*     */   }
+    return this.negNode;
+  }
 
     public void setNegNode(String paramString) {
-/* 126 */     this.negNode = paramString;
-/*     */   }
+     this.negNode = paramString;
+   }
 
     public String getName() {
-/* 130 */     return this.name;
-/*     */   }
+    return this.name;
+  }
 
     public void setName(String paramString) {
-/* 134 */     this.name = paramString;
-/*     */   }
+    this.name = paramString;
+   }
 
     public String toString() {
         return String.format("Name: %s", new Object[] { this.name });

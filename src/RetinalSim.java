@@ -39,7 +39,6 @@
 
    public static Model[] readInputFile(String fileName) {
      try {
-
        ModelBuilder mb = new ModelBuilder();
        Scanner scanner = new Scanner(new File(fileName));
        while (scanner.hasNext()) {
