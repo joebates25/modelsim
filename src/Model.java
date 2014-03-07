@@ -12,18 +12,18 @@
    public int totalPatients;
 
    public PriorityQueue<Event> getEventList()
-/*    */   {
-/* 13 */     return this.eventList;
-/*    */   }
+   {
+     return this.eventList;
+   }
 
    public int getTime()
-/*    */   {
-/* 18 */     return this.time;
-/*    */   }
+   {
+     return this.time;
+   }
 
    public void setTime(int paramInt) {
-/* 22 */     this.time = paramInt;
-/*    */   }
+     this.time = paramInt;
+   }
 
    public Model(ArrayList<Frame> paramArrayList) {
      this.eventList = new PriorityQueue();
