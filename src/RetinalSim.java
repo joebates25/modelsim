@@ -1,10 +1,9 @@
- import java.io.File;
- import java.io.FileNotFoundException;
- import java.util.ArrayList;
- import java.util.Random;
- import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Random;
+import java.util.Scanner;
 
- public class RetinalSim
+public class RetinalSim
  {
    public static void main(String[] args)
    {
@@ -18,13 +17,15 @@
        }
        else {
          Model[] models = readInputFile(args[0]);
-         for (int i = 0; i < models.length; i++)
-         {
-           models[i].run();
+           int i = 0;
+           for (Model m : models) {
+               m.init();
+               m.run();
 
-           System.out.printf("Model %d: \n", i);
-           models[i].reportResults();
-         }
+               System.out.printf("Model %d: \n", i);
+               i++;
+               m.reportResults();
+           }
        }
      } catch (Exception localException) { localException.printStackTrace(); }
 
@@ -120,18 +121,12 @@
      return new Range(new double[] {Double.parseDouble(str)});
    }
 
-   private static double[] getStepValues(double paramDouble1, double paramDouble2, double paramDouble3)
-   {
-     int i = (int)((paramDouble2 - paramDouble1) / paramDouble3);
-     double[] arrayOfDouble = new double[i];
+     private static double[] getStepValues(double low, double high, double step) {
+         int i = (int) ((high - low) / step);
+         double[] arrayOfDouble = new double[i];
      for (int j = 0; j < i; j++) {
-       arrayOfDouble[j] = (paramDouble1 + paramDouble3 * j);
+         arrayOfDouble[j] = (low + step * j);
      }
      return arrayOfDouble;
    }
  }
-
-/* Location:           /Users/josephbates/Desktop/ModelSim 2/ModelSim.jar
- * Qualified Name:     RetinalSim
- * JD-Core Version:    0.6.2
- */

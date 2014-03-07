@@ -1,48 +1,53 @@
+import com.rits.cloning.Cloner;
+
 import java.util.ArrayList;
-/*    */ import java.util.Iterator;
+/*    */
 
-public class ModelBuilder
-{
-  ArrayList<FrameRange> frames;
-  SourceFrame source;
+public class ModelBuilder {
+    ArrayList<FrameRange> frameRanges;
+    SourceFrame source;
     ArrayList<SinkFrame> sinks;
+    Cloner objectCloner;
+    ArrayList<Model> models = new ArrayList<Model>();
 
-    public ModelBuilder()
-    {
-        this.frames = new ArrayList();
+    public ModelBuilder() {
+        this.frameRanges = new ArrayList();
         this.sinks = new ArrayList();
+        objectCloner = new Cloner();
     }
 
     public void add(FrameRange paramFrameRange) {
-        this.frames.add(paramFrameRange);
+        this.frameRanges.add(paramFrameRange);
     }
 
 
     public Model[] buildModels() {
-        int i = 0;
-        for (FrameRange fr: frames){
-            i = Math.max(i, fr.getSize());
+        Model m = new Model();
+        buildModel(m, 0);
+        assert (models.size() > 0);
+        Model[] builtModels = new Model[models.size()];
+        for (int i = 0; i < models.size(); i++) {
+            builtModels[i] = models.get(i);
         }
-        Model[] models = new Model[i];
-        for (int j = 0; j < models.length; j++) {
-            ArrayList modelFrames = new ArrayList();
-            modelFrames.add(new SourceFrame(this.source));
-            for (FrameRange fr: frames)
-            {
-                Frame frame = fr.get();
-                if (frame.isDecision())
-                    modelFrames.add(new DecisionFrame((DecisionFrame)frame));
-                else if (frame.isStandard())
-                    modelFrames.add(new StandardFrame((StandardFrame)frame));
+        return builtModels;
+
+    }
+
+    private void buildModel(Model model, int index) {
+        if (index == frameRanges.size()) {
+            model.frames.add(0, objectCloner.deepClone(this.source));
+            for (SinkFrame sink : sinks) {
+                model.frames.add(objectCloner.deepClone(sink));
             }
-            for (SinkFrame sink: sinks) {
-                modelFrames.add(new SinkFrame(sink));
+            this.models.add(model);
+        } else {
+            for (Frame f : frameRanges.get(index).frames) {
+                Model m = objectCloner.deepClone(model);
+                m.addFrame(f);
+                buildModel(m, index + 1);
             }
-            models[j] = new Model(modelFrames);
-            ((SourceFrame)(models[j].frames.get(0))).setNextFrame(source.nextFrame);
-            ((SourceFrame)(models[j].frames.get(0))).setParentModel(models[j]);
         }
-        return models;
+
     }
 
     public void addSource(SourceFrame paramSourceFrame) {
@@ -54,8 +59,3 @@ public class ModelBuilder
         this.sinks.add(paramSinkFrame);
     }
 }
-
-/* Location:           /Users/josephbates/Desktop/ModelSim 2/ModelSim.jar
- * Qualified Name:     ModelBuilder
- * JD-Core Version:    0.6.2
- */

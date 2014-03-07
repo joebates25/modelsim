@@ -1,8 +1,10 @@
- import java.io.PrintStream;
-/*    */ import java.util.ArrayList;
-/*    */ import java.util.PriorityQueue;
+import java.util.ArrayList;
+import java.util.PriorityQueue;
 
- public class Model
+/*    */
+/*    */
+
+public class Model
    implements Runnable
  {
    PriorityQueue<Event> eventList;
@@ -23,21 +25,32 @@
 
    public void setTime(int paramInt) {
      this.time = paramInt;
+
    }
 
    public Model(ArrayList<Frame> paramArrayList) {
-     this.eventList = new PriorityQueue();
      this.frames = paramArrayList;
-     for (Frame localFrame : paramArrayList)
-       localFrame.setParentModel(this);
-     this.totalPatients = ((SourceFrame)paramArrayList.get(0)).getNumPatients();
+
    }
 
-   public void init() {
-     for (Frame localFrame : this.frames) {
-       localFrame.processed = 0;
-       localFrame.totalCost = 0;
+     public Model() {
+         this.frames = new ArrayList<Frame>();
+
      }
+
+     public void addFrame(Frame f) {
+         this.frames.add(f);
+     }
+
+     public void init() {
+
+         this.eventList = new PriorityQueue<Event>();
+         for (Frame localFrame : this.frames) {
+             localFrame.setParentModel(this);
+             localFrame.processed = 0;
+       localFrame.totalCost = 0;
+             this.totalPatients = ((SourceFrame) frames.get(0)).getNumPatients();
+         }
    }
 
    public Frame getFrameWithName(String paramString)
