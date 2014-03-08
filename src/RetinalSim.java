@@ -1,5 +1,7 @@
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -10,13 +12,7 @@ public class RetinalSim
      try
      {
        Scanner scanner;
-       if (args[0].equalsIgnoreCase("-help")) {
-         scanner = new Scanner(new File("README"));
-         while (scanner.hasNextLine())
-           System.out.println(scanner.nextLine());
-       }
-       else {
-         Model[] models = readInputFile(args[0]);
+         Model[] models = readInputFile(getInputFile());
            int i = 0;
            for (Model m : models) {
                m.init();
@@ -26,12 +22,21 @@ public class RetinalSim
                i++;
                m.reportResults();
            }
-       }
      } catch (Exception localException) { localException.printStackTrace(); }
 
    }
 
-   public static boolean weightedProb(double paramDouble)
+     private static String getInputFile() {
+         Scanner scan = new Scanner(System.in);
+         System.out.println("Sample files include input and input2");
+         System.out.print("Input file name: ");
+         String file = scan.next();
+         scan.close();
+         return file;
+
+     }
+
+     public static boolean weightedProb(double paramDouble)
    {
        return paramDouble * 100.0D > new Random().nextInt(100);
 
@@ -40,8 +45,15 @@ public class RetinalSim
 
    public static Model[] readInputFile(String fileName) {
      try {
+       Scanner scanner;
+       if (fileName.equalsIgnoreCase("input")){
+           scanner = new Scanner(RetinalSim.class.getClassLoader().getResourceAsStream("input"));
+       } else if (fileName.equalsIgnoreCase("input2")){
+           scanner = new Scanner(RetinalSim.class.getClassLoader().getResourceAsStream("input2"));
+       } else {
+           scanner = new Scanner(new File(fileName));
+       }
        ModelBuilder mb = new ModelBuilder();
-       Scanner scanner = new Scanner(new File(fileName));
        while (scanner.hasNext()) {
          String identifier = scanner.next();
          if (identifier.equalsIgnoreCase("source")) {
@@ -97,8 +109,10 @@ public class RetinalSim
            }
          }
        }
+       System.out.println("Creating models...");
        Model[] models = mb.buildModels();
-       System.out.println("0 total node(s) processed.");
+       System.out.println(models.length + " models created. Beginning simulations now.");
+       scanner.close();
        return models;
      } catch (FileNotFoundException localFileNotFoundException) {
        System.out.printf("Error: File named \"%s\" was not found. ", fileName);
